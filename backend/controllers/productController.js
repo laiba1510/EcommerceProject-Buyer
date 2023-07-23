@@ -2,8 +2,11 @@ const ErrorHandle = require("../utils/errorHandle");
 
 const Product = require("../models/productModel");
 
+const asyncErrorHandling = require ("../middleware/asyncErrorHandling");
+const ProductPageFeatures = require("../utils/productPageFeatures");
 
-exports.addProduct = async (req, res, next)=>
+
+exports.addProduct = asyncErrorHandling (async (req, res, next)=>
 {
   const product = await Product.create(req.body)
 
@@ -13,20 +16,29 @@ exports.addProduct = async (req, res, next)=>
     product
   })
 }
+);
 
+//search Functionality
+exports.getProducts = asyncErrorHandling(async (req, res) => {
+   const productPerPage = 6
+   const productCounter  = await Product.countDocuments()
+  
+  const productPageFeature = new ProductPageFeatures(Product.find(), req.query)
+  .search()
+  .filter().pagination(productPerPage);  
+  const products = await productPageFeature.query;
+  let remaingProducts = products.length;
 
-exports.getProducts = async (req, res, next) =>
-{
-  const products = await Product.find();
-
-  res.status(209).json ({
+  res.status(200).json({
    success: true,
-   products 
-  })
-}
+   products ,
+   productCounter,
+   productPerPage,
+   remaingProducts,
+  });
+});
 
-
-  exports.getProductsbyID = async (req, res, next) => {
+  exports.getProductsbyID = asyncErrorHandling (async (req, res, next) => {
     const product = await Product.findById(req.params.id);
   
     if (!product) {
@@ -37,4 +49,4 @@ exports.getProducts = async (req, res, next) =>
       success: true,
       product,
     });
-  };
+  });
