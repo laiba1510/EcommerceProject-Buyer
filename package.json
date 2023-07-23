@@ -1,11 +1,11 @@
 {
   "name": "ecommerceproject-buyer",
   "version": "1.0.0",
-  "description": "This module will deal with buyer functionalities",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start" :"nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,6 @@
   },
   "homepage": "https://github.com/laiba1510/EcommerceProject-Buyer#readme",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "mongoose": "^7.4.0",
     "nodemon": "^3.0.1"
   }
 }

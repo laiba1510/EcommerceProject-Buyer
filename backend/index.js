@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const productRoutes = require("./Routes/productRoutes");
+const userRoutes = require("./Routes/productRoutes");
+const backendErrorHandling = require("./utils/errorHandle");
 
 dotenv.config();
 
@@ -20,6 +22,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.use("/product", productRoutes);
+app.use("/user", userRoutes);
+
+// Error handling middleware should be placed after defining routes
+app.use(backendErrorHandling);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
