@@ -68,7 +68,7 @@ const userModel = new mongoose.Schema
         
           //pasword check 
           {
-            userModel.method.passwordCompare = async function(userPassword)
+            userModel.methods.passwordCompare = async function(userPassword)
             {
               return await bycrypt.compare(userPassword, this.password);
             }
