@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require ('validator');
 const bycrypt = require ("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const userModel = new mongoose.Schema
 (
@@ -41,7 +42,7 @@ const userModel = new mongoose.Schema
           },
           
           resetPasswordToken : String,
-          resetPasswordexpire : Date,
+          resetPasswordToexpire : Date,
           });
 
           userModel.pre("save" , async function(next) //this here we dont use arrow option because this object needs to used
@@ -75,4 +76,23 @@ const userModel = new mongoose.Schema
           }
     
 
-          module.exports = mongoose.model("User", userModel)
+
+          //reseting password funtionality
+          userModel.methods.resetPassword = function () {
+            // Generating Token
+            const newToken = crypto.randomBytes(20).toString("hex");
+          
+            // Hashing and adding resetPasswordToken to userSchema
+            this.resetPasswordToken = crypto
+              .createHash("sha256")
+              .update(newToken)
+              .digest("hex");
+           
+            this.resetPasswordToExpire = Date.now() + 10 * 60 * 1000;
+          
+            return newToken;
+          };
+          
+
+          const User = mongoose.model('User', userModel);
+          module.exports = User;

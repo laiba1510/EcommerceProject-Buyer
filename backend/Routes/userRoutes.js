@@ -8,4 +8,7 @@ const checkAuthentication = require("../middleware/auth");
 router.post('/register', userController.registerUser);
 router.post('/login' , userController.login );
 router.get('/logout' , userController.logout);  
-module.exports= router ;
+router.post('/forgotPassword' , userController.forgotPassword);  
+router.put('/resetPassword/:token' , userController.resetPassword); 
+router.get('/userAccount' , checkAuthentication, userController.getUser);  
+module.exports= router  ;
