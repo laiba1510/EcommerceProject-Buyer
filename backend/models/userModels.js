@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require ('validator');
+const bycrypt = require ("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const userModel = new mongoose.Schema
 (
     {
@@ -24,7 +27,7 @@ const userModel = new mongoose.Schema
           },
           profilePicture: {
             public_id: {
-              type: String,
+              type: String, 
               required: true,
             },
             url: {
@@ -40,7 +43,36 @@ const userModel = new mongoose.Schema
           resetPasswordToken : String,
           resetPasswordexpire : Date,
           });
+
+          userModel.pre("save" , async function(next) //this here we dont use arrow option because this object needs to used
+          {
+            //we donot want to hash the already hashed password when updating user so for that if else
+            if(!this.isModified("password"))
+            { 
+              next();
+              
+            }
+
+            this.password= await bycrypt.hash(this.password, 10)  // 10 shows the power 
+             
+          });
+
+          //jwt token creation code
+          userModel.methods.setJWT = function()
+          {
+            return jwt.sign({id:this._id}, process.env.JWT_SECRET_KEY, {
+              expiresIn: '24h'
+            })
+          } 
+
         
+          //pasword check 
+          {
+            userModel.method.passwordCompare = async function(userPassword)
+            {
+              return await bycrypt.compare(userPassword, this.password);
+            }
+          }
     
 
           module.exports = mongoose.model("User", userModel)
