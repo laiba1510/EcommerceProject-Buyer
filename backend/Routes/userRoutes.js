@@ -11,4 +11,6 @@ router.get('/logout' , userController.logout);
 router.post('/forgotPassword' , userController.forgotPassword);  
 router.put('/resetPassword/:token' , userController.resetPassword); 
 router.get('/userAccount' , checkAuthentication, userController.getUser);  
+router.put('/passwordUpdate' , checkAuthentication, userController.userPasswordUpdate); 
+router.put('/profileUpdate' , checkAuthentication, userController.updateUserProfile);  
 module.exports= router  ;

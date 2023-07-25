@@ -64,7 +64,7 @@ exports.login = asyncErrorHandling(async (req, res, next) => {
     return next(new ErrorHandle("Invalid email-password", 401));
   }
 
-  const passwordMatchCheck = user.passwordCompare(password);
+  const passwordMatchCheck = await user.passwordCompare(password);
 
   if (!passwordMatchCheck) {
     return next(new ErrorHandle("Invalid email-password", 401));
@@ -161,7 +161,7 @@ exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
 
   await user.save();
 
-  sendToken(user, 200, res);
+  cookieTokenization(user, 200, res);
 });
 
 
@@ -176,64 +176,40 @@ exports.getUser = asyncErrorHandling(async (req, res, next) => {
   });
 });
 
-// // update User password
-// exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
-//   const user = await User.findById(req.user.id).select("+password");
+exports.userPasswordUpdate = asyncErrorHandling(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
 
-//   const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+  const isPasswordMatched = await user.passwordCompare(req.body.oldPassword);
 
-//   if (!isPasswordMatched) {
-//     return next(new ErrorHander("Old password is incorrect", 400));
-//   }
+  if (!isPasswordMatched) {
+    return next(new ErrorHandle("Old password is incorrect", 400));
+  }
 
-//   if (req.body.newPassword !== req.body.confirmPassword) {
-//     return next(new ErrorHander("password does not match", 400));
-//   }
+  if (req.body.newPassword !== req.body.confirmPassword) {
+    return next(new ErrorHandle("password does not match", 400));
+  }
 
-//   user.password = req.body.newPassword;
+  user.password = req.body.newPassword;
 
-//   await user.save();
+  await user.save();
 
-//   sendToken(user, 200, res);
-// });
+  cookieTokenization(user, 200, res);
+});
 
-// // update User Profile
-// exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
-//   const newUserData = {
-//     name: req.body.name,
-//     email: req.body.email,
-//   };
+exports.updateUserProfile = asyncErrorHandling(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
 
-//   if (req.body.avatar !== "") {
-//     const user = await User.findById(req.user.id);
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
 
-//     const imageId = user.avatar.public_id;
-
-//     await cloudinary.v2.uploader.destroy(imageId);
-
-//     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-//       folder: "avatars",
-//       width: 150,
-//       crop: "scale",
-//     });
-
-//     newUserData.avatar = {
-//       public_id: myCloud.public_id,
-//       url: myCloud.secure_url,
-//     };
-//   }
-
-//   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
-//     new: true,
-//     runValidators: true,
-//     useFindAndModify: false,
-//   });
-
-//   res.status(200).json({
-//     success: true,
-//   });
-// });
-
-
-
-
+  res.status(200).json({
+    success: true,
+    message: "updated",
+  });
+});
