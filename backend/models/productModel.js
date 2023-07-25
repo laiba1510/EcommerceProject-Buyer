@@ -60,7 +60,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      comment: {
+      commentReviews: {
         type: String,
         required: false,
       },
