@@ -1,23 +1,25 @@
-// class ErrorHandle extends Error 
-// {
-//     constructor ( message, statusCode)
-//     {
-//       super(message);
-//       this.statusCode = statusCode  
-
-//       Error.captureStackTrace(this, this.constructor)
-//     }
-// }
-
-// module.exports = ErrorHandle;
-
-
-class ErrorHandle extends Error {
+class BackendErrorHandle extends Error   //inheritted from deafult node class error
+{
   constructor(message, statusCode) {
     super(message);
-    this.statusCode = statusCode;
-    Error.captureStackTrace(this, this.constructor);
+    this.statusCode = statusCode
+
+
+    //inherited class can use the parent class methods
+    Error.captureStackTrace(this, this.constructor)
+    //first this means object ,  
   }
 }
 
-module.exports = ErrorHandle;
+module.exports = BackendErrorHandle;
+
+
+// class BackendErrorHandle extends Error {
+//   constructor(message, statusCode) {
+//     super(message);
+//     this.statusCode = statusCode;
+//     Error.captureStackTrace(this, this.constructor);
+//   }
+// }
+
+// module.exports = BackendErrorHandle;

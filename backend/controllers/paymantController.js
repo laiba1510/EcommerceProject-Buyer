@@ -19,4 +19,13 @@ exports.paymentProcessing = asyncErrorHandling(async(req, res, next)=>
         success : true,
         client_secret  : myPayment.client_secret
     }); 
+
+
+    exports.sending_STRIPE_API_KEY= asyncErrorHandling(async(req, res, next)=>
+    {
+        res.status(200).json
+        ({
+            STRIPE_API_KEY : process.env.STRIPE_API_KEY
+        });
+    });
 });
