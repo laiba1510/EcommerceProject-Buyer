@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bycrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
@@ -53,7 +53,7 @@ userModel.pre("save", async function (next) //this here we dont use arrow option
 
   }
 
-  this.password = await bycrypt.hash(this.password, 10)  // 10 shows the power 
+  this.password = await bcrypt.hash(this.password, 10)  // 10 shows the power 
 
 });
 

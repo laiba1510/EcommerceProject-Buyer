@@ -1,5 +1,5 @@
 const ErrorHandle = require("../utils/errorHandle");
-
+const bcrypt = require("bcryptjs");
 const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const User = require("../models/userModels");
 const cookieTokenization = require("../utils/Token");
@@ -64,7 +64,7 @@ exports.login = asyncErrorHandling(async (req, res, next) => {
     return next(new ErrorHandle("Invalid email-password", 401));
   }
 
-  const passwordMatchCheck = await user.passwordCompare(password);
+  const passwordMatchCheck = await user.comparePassword(password);
 
   if (!passwordMatchCheck) {
     return next(new ErrorHandle("Invalid email-password", 401));

@@ -5,7 +5,7 @@ const productRoutes = require("./Routes/productRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const cookieParser = require("cookie-parser");
 const backendErrorHandling = require("./utils/errorHandle");
-
+const orderRoutes = require("./Routes/orderRoutes");
 dotenv.config();
 
 const app = express();
@@ -25,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use("/product", productRoutes);
 app.use("/user", userRoutes);
+app.use("/order", orderRoutes);
 
 // Error handling middleware should be placed after defining routes
 app.use(backendErrorHandling);
