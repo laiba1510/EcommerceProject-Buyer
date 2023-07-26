@@ -17,6 +17,6 @@ exports.paymentProcessing = asyncErrorHandling(async(req, res, next)=>
     res.status(200).json
     ({
         success : true,
-        client_secret : myPayment.client_secret
-    });
+        client_secret  : myPayment.client_secret
+    }); 
 });
