@@ -4,7 +4,7 @@ const paymentController = require("../controllers/paymantController");
 const checkAuthentication = require('../middleware/auth');
 
 router.post('/pay', checkAuthentication,paymentController.paymentProcessing);
-router.get('/pay', checkAuthentication,paymentController.sending_STRIPE_API_KEY);
+router.get('/stripeKey', checkAuthentication,paymentController.sending_STRIPE_API_KEY);
  
  
 

@@ -10,21 +10,21 @@ const userModel = new mongoose.Schema
       name:
       {
         type: String,
-        required: [true, "Please Enter Your Name"],
-        maxLength: [30, "Name cannot exceed 30 characters"],
-        minLength: [4, "Name should have more than 4 characters"],
+        required: [true, "enter name"],
+        maxLength: [30, "maxLenght= 30"],
+        minLength: [4, "minlenght = 4"],
       },
       email: {
         type: String,
-        required: [true, "Please Enter Your Email"],
+        required: [true, "enter email"],
         unique: true,
-        validate: [validator.isEmail, "Please Enter a valid Email"],
+        validate: [validator.isEmail, "enter email"],
       },
       password: {
         type: String,
-        required: [true, "Please Enter Your Password"],
-        minLength: [8, "Password should be greater than 8 characters"],
-        select: false,  //except password baaqi sab milne chaiye
+        required: [true, "you missed password"],
+        minLength: [5, "password should be greated then 5"],
+        select: false,  //except password baaqi sab milne chaiye when ever get is called
       },
       profilePicture: {
         public_id: {
@@ -50,7 +50,7 @@ userModel.pre("save", async function (next) //this here we dont use arrow option
   //we donot want to hash the already hashed password when updating user so for that if else
   if (!this.isModified("password")) {
     next();
-
+//this will run during update profile case
   }
 
   this.password = await bcrypt.hash(this.password, 10)  // 10 shows the power 
@@ -60,17 +60,18 @@ userModel.pre("save", async function (next) //this here we dont use arrow option
 //jwt token creation code
 userModel.methods.setJWT = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: '24h'
+    expiresIn: '48h'
   })
-}
+  //user id ,secret key and private key is needed
+} 
 
 
-//pasword check 
-userModel.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+//pasword check by comparing password
+userModel.methods.passwordComparison = async function (hashedPassword) {
+  return await bcrypt.compare(hashedPassword, this.password);
 };
-
-
+ 
+  
 
 
 
@@ -78,6 +79,7 @@ userModel.methods.comparePassword = async function (password) {
 userModel.methods.resetPassword = function () {
   // Generating Token
   const newToken = crypto.randomBytes(20).toString("hex");
+  //buffer creation like A12 H7...  that is why we write digest hex
 
   // Hashing and adding resetPasswordToken to userSchema
   this.resetPasswordToken = crypto

@@ -1,4 +1,4 @@
-const ErrorHandle = require("../utils/errorHandle");
+const ErrorHandle = require("../utils/BackendErrorHandle");
 
 const Product = require("../models/productModel");
 
@@ -6,16 +6,18 @@ const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const ProductPageFeatures = require("../utils/productPageFeatures");
 
 
-exports.addProduct = asyncErrorHandling(async (req, res, next) => {
-  const product = await Product.create(req.body)
+// exports.addProduct = asyncErrorHandling(async (req, res, next) => {
+  
+//   req.body.user = req.user.id;
+//   const product = await Product.create(req.body)
 
-  res.status(201).json
-    ({
-      success: true,
-      product
-    })
-}
-);
+
+//   res.status(201).json
+//     ({
+//       success: true,
+//       product
+//     });
+// } );
 
 //search Functionality
 exports.getProducts = asyncErrorHandling(async (req, res) => {
@@ -82,7 +84,7 @@ let average=0;
     average = average + review.rating 
   });
 
-  product.ratings = avg / product.reviews.length;
+  product.ratings = average / product.reviews.length;
 
 
   // Save the updated product with the new review

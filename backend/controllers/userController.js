@@ -1,4 +1,4 @@
-const ErrorHandle = require("../utils/errorHandle");
+const ErrorHandle = require("../utils/BackendErrorHandle");
 const bcrypt = require("bcryptjs");
 const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const User = require("../models/userModels");
@@ -9,12 +9,12 @@ const nodeMailer = require("nodemailer");
 const sendEmail = async (options) => {
   const transporter = nodeMailer.createTransport({
 
-    host: process.env.SMPT_HOST,
-    port: process.env.SMPT_PORT,
-    service: process.env.SMPT_SERVICE,
-    auth: {
-      user: process.env.SMPT_MAIL,
-      pass: process.env.SMPT_PASSWORD,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    service: process.env.SMTP_SERVICE,
+    auth: { 
+      user: process.env.SMTP_MAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
@@ -58,13 +58,13 @@ exports.login = asyncErrorHandling(async (req, res, next) => {
     return next(new ErrorHandle("pls enter email and password", 400));
   }
 
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email }).select("+password"); //false kiya hai thats why made it
 
   if (!user) {
     return next(new ErrorHandle("Invalid email-password", 401));
   }
 
-  const passwordMatchCheck = await user.comparePassword(password);
+  const passwordMatchCheck = await user.passwordComparison(password);
 
   if (!passwordMatchCheck) {
     return next(new ErrorHandle("Invalid email-password", 401));
@@ -86,7 +86,7 @@ exports.logout = asyncErrorHandling(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "logged out",
+    message: "you logged out",
   });
 });
 
@@ -100,7 +100,7 @@ exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
   }
 
   const newToken = user.resetPassword();
-  await user.save({ validateBeforeSave: false });
+  await user.save({ validateBeforeSave: false });  // got the pass and saved it 
   const resetPasswordUrl = `${req.protocol}://${req.get(
     "host"
   )}/password/reset/${newToken}`;
@@ -110,7 +110,7 @@ exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
   try {
     await sendEmail({
       email: user.email,
-      subject: `Password Recovery Service By E-Commerce`,
+      subject: `reovere password`,
       message,
     });
 
@@ -120,7 +120,7 @@ exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
     });
   } catch (error) {
     user.resetPasswordToken = undefined;
-    user.resetPasswordToExpire = undefined;
+    user.resetPasswordExpire = undefined;
 
     await user.save({ validateBeforeSave: false });
 
@@ -147,7 +147,7 @@ exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
       new ErrorHandle(
         "Reset Password Token is invalid or has been expired",
         400
-      )
+      ) 
     );
   }
 
@@ -179,7 +179,7 @@ exports.getUser = asyncErrorHandling(async (req, res, next) => {
 exports.userPasswordUpdate = asyncErrorHandling(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
-  const isPasswordMatched = await user.passwordCompare(req.body.oldPassword);
+  const isPasswordMatched = await user.passwordComparison(req.body.oldPassword);
 
   if (!isPasswordMatched) {
     return next(new ErrorHandle("Old password is incorrect", 400));

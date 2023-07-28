@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const productRoutes = require("./Routes/productRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const cookieParser = require("cookie-parser");
-const backendErrorHandling = require("./utils/errorHandle");
+const backendErrorHandling = require("./middleware/errorHandle");
 const orderRoutes = require("./Routes/orderRoutes");
 const payementRoutes = require("./Routes/paymentRoutes");
 dotenv.config();

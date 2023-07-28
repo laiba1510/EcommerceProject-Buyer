@@ -1,10 +1,10 @@
 const cookieTokenization = (user, statusCode, res) => {
   const token = user.setJWT();
 
-  // options for cookie
+  // optional time for cookie
   const options = {
     expires: new Date(
-      Date.now() + process.env.COOKIE_EXPIRATION * 24 * 60 * 60 * 1000
+      Date.now() + process.env.COOKIE_EXPIRATION * 48 * 60 * 60 * 1000
     ),
     httpOnly: true,
   };
@@ -18,3 +18,6 @@ const cookieTokenization = (user, statusCode, res) => {
 };
 
 module.exports = cookieTokenization;
+
+
+//saving token in the cookie
