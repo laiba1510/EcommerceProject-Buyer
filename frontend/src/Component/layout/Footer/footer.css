@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Add custom styles to override default colors */
+.wrapper .icon span i {
+  color: #000; /* Set the color to black */
+}
+
+.wrapper .icon:hover span i {
+  color: #fff; /* Set the color to white on hover */
+}
+
+.wrapper .facebook span i {
+  color: #000; /* Set the Facebook icon color to black */
+}
+
+.wrapper .twitter span i {
+  color: #000; /* Set the Twitter icon color to black */
+}
+
+.wrapper .instagram span i {
+  color: #000; /* Set the Instagram icon color to black */
+}
+
+.wrapper .github span i {
+  color: #000; /* Set the GitHub icon color to black */
+}
+
+.wrapper .youtube span i {
+  color: #000; /* Set the YouTube icon color to black */
+}
+
+a i {
+    text-decoration:none;
+    color: black;
+}
+a:hover i {
+    color: white;
+  }
+.wrapper {
+  display: inline-flex;
+  list-style: none;
+}
+
+.icon {
+  position: relative;
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 15px;
+  margin: 10px;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+
+    font-size: 16px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: #ffffff;
+  color: #000000; /* Changed tooltip text color to black */
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.icon:hover span,
+.icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.facebook:hover,
+.facebook:hover .tooltip,
+.facebook:hover .tooltip::before {
+  background: #1877F2;
+  color: #ffffff;
+}
+
+.twitter:hover,
+.twitter:hover .tooltip,
+.twitter:hover .tooltip::before {
+  background: #1DA1F2;
+  color: #ffffff;
+}
+
+.instagram:hover,
+.instagram:hover .tooltip,
+.instagram:hover .tooltip::before {
+  background: #E4405F;
+  color: #ffffff;
+}
+
+.github:hover,
+.github:hover .tooltip,
+.github:hover .tooltip::before {
+  background: #333333;
+  color: #ffffff;
+}
+
+.youtube:hover,
+.youtube:hover .tooltip,
+.youtube:hover .tooltip::before {
+  background: #CD201F;
+  color: #ffffff;
+}
+
+  
+  /* Additional styles for the footer container and company info */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f1f1f1; /* Adjust the background color of the footer */
+    text-align: center;
+  }
+  
+  
+  .company-info {
+    margin-right: 30px;
+  }
+  
+  .company-info h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+  
+  .company-info p {
+    font-size: 14px;
+    color: #666666; /* Adjust the color of the company info text */
+  }
+  
+  .social-icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .social-icons li {
+    list-style: none;
+  }
+  
+  p {
+    font-size: 14px;
+    color: #666666; /* Adjust the color of the "Follow us" text */
+  }
+  
