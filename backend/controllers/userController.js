@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const User = require("../models/userModels");
 const cookieTokenization = require("../utils/Token");
+const crypto = require("crypto");
 
 const nodeMailer = require("nodemailer");
 
@@ -19,7 +20,7 @@ const sendEmail = async (options) => {
   });
 
   const mailOptions = {
-    from: process.env.SMPT_MAIL,
+    from: process.env.SMTP_MAIL,
     to: options.email,
     subject: options.subject,
     text: options.message,
