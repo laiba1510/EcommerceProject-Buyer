@@ -1,21 +1,22 @@
-import {createstore, combineReducers , applyMiddlware}  from "redux";
- import  thunk from "redux-thunk";
- import {composeWithDevTools} from "redux-devtools-extension" ; 
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+import productReducer from "./reducers/productReducer";
 
+// Combine all the reducers into a single reducer
+const reducer = combineReducers({
+  products: productReducer,
+});
 
-//so that all the reducers can be combine into a single reducer
- const reducer = combineReducers ({
+let initialState = {};
 
- });
+const middleware = [thunk];
 
+// Apply middleware correctly
+const store = createStore(
+  reducer,
+  initialState,
+  composeWithDevTools(applyMiddleware(...middleware))
+);
 
- let initialState  = {}
-
- const middleware = [thunk] ; 
-
- //middlware wali poori array passed
-
- const store = createStore(reducer , initialState ,composeWithDevTools(applyMiddlware(...middleware)));
-
-
- export default store ;
+export default store;
