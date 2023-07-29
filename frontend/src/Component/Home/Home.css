@@ -19,3 +19,17 @@
      margin : 5vmax;
      font : 600 2.5vmax "Roboto";
 }
+
+
+.swipeLeftAnimation {
+  animation: swipeLeft 1s forwards;
+}
+
+@keyframes swipeLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
