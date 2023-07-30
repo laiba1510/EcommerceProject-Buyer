@@ -6,18 +6,18 @@ const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const ProductPageFeatures = require("../utils/productPageFeatures");
 
 
-// exports.addProduct = asyncErrorHandling(async (req, res, next) => {
+exports.addProduct = asyncErrorHandling(async (req, res, next) => {
   
-//   req.body.user = req.user.id;
-//   const product = await Product.create(req.body)
+  // req.body.user = req.user.id;
+  const product = await Product.create(req.body)
 
 
-//   res.status(201).json
-//     ({
-//       success: true,
-//       product
-//     });
-// } );
+  res.status(201).json
+    ({
+      success: true,
+      product
+    });
+} );
 
 //search Functionality
 exports.getProducts = asyncErrorHandling(async (req, res) => {

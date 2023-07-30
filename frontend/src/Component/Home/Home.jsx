@@ -36,7 +36,7 @@ const Home = () => {
           <Data title="Home Page" />
          
           <div className="banner">
-            <p>WELCOME TO LAIBA AND LAIBA ECOM WEB</p>
+            <p>WELCOME TO LAIBA^2M ECOM WEB</p>
             <h1>all good in one place</h1>
             <a href="#container">
               <button>swipe down</button>

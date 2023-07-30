@@ -7,16 +7,15 @@ import { ALL_PRODUCT_FAIL, ALL_PRODUCT_REQUEST, ALL_PRODUCT_SUCCESS, CLEAR_ERROR
 
 
 //try catch block is used, error aate we will tell to drop coz its a fail
-export const getProduct = (keyword ="") =>
+export const getProduct = (keyword ="", currentPage=1, price=[0, 8000]) =>
 async(dispatch) => 
 {
     try  
     {
         dispatch({type : ALL_PRODUCT_REQUEST});
 
-        let link = `/product/getAllProduct =${keyword}`;
-         const {data} = await axios.get(link);
-
+        let link = `/product/getAllProduct?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}`; // Corrected URL format
+  const { data } = await axios.get(link);
          dispatch ({
             type : ALL_PRODUCT_SUCCESS,
             payload: data,
