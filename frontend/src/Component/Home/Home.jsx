@@ -1,58 +1,57 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useEffect,} from "react";
+// import { useNavigate } from "react-router-dom";
 import "./Home.css";
-import Product from "./Product.js";
-import Data from "../layout/Data";
+import Product from "./product.jsx";
+import Data from  "../layout/Data.jsx"
 import { getProduct } from "../../actions/productAction";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
+import Loader from "../layout/pageLoader/Loader";
+
+
+
+
+const product = {
+  name: "blue shirt",
+  images: [{ url: "https://i5.walmartimages.com/asr/ca11c0f5-e770-41e6-844d-b8131dfc48c0.582eb7114b6b9cac3f9aec2794a6678c.jpeg" }],
+  price: "Rs 777",
+  _id: "abshiekd",
+};
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { loading, error, products, productsCount } = useSelector(
-    (state) => state.products
-  );
-  useEffect(() => {
+
+  const dispatch = useDispatch ();
+  const {loading, error, products, productCounter } =
+   useSelector(state=>state.products)
+  useEffect(()=>
+  {
     dispatch(getProduct());
   }, [dispatch]);
-
-  const navigate = useNavigate();
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
-
-  const handleClick = () => {
-    setIsButtonClicked(true);
-    setTimeout(() => {
-      navigate("/product");
-    }, 1000);
-  };
 
   return (
     <Fragment>
       {loading ? (
-        "Loading..." // Corrected the loading state
+        <Loader/>
       ) : (
-        // Use parentheses instead of curly braces for the ternary expression
         <Fragment>
-          <Data title="HOME PAGE IN WORKING" />
-
-          <div className={`mainPage ${isButtonClicked ? "swipeLeftAnimation" : ""}`}>
+          <Data title="Home Page" />
+         
+          <div className="banner">
             <p>WELCOME TO LAIBA AND LAIBA ECOM WEB</p>
             <h1>all good in one place</h1>
             <a href="#container">
-              <button onClick={handleClick}>swipe left</button>
+              <button>swipe down</button>
             </a>
           </div>
 
-          <h2 className="HomePageHeading">Featured Products</h2>
-          <div className="constainer" id="constainer">
-            {products &&
-              products.map((product) => <Product product={product} />)}
+          <h2 className="homeHeading"> Featured Products</h2>
+          <div className="container" id="conatiner">
+            {products && products.map(product => (
+              <Product key={product._id} product={product} />
+            ))}
           </div>
         </Fragment>
       )}
     </Fragment>
   );
 };
-
 export default Home;
-
-

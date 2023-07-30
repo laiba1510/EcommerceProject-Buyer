@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./Component/layout/header/NavBar";
 import "./App.css";
 import Footer from "./Component/layout/Footer/footer.jsx";
-import Home from "./Component/Home/Home";
-
+import Home from "./Component/Home/Home.jsx";
+import Loader from "./Component/layout/pageLoader/Loader.jsx"
 function App() {
   return (
     <Router>
@@ -13,7 +13,8 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Add more routes here if needed */}
+          <Route path="/sad" element={<Loader />} />
+          
         </Routes>
         <Footer />
       </div>

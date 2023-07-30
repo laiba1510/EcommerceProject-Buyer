@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faEnvelope,
-  faShoppingCart,
+  // faShoppingCart,
   faSearch,
   faUser,
   faBars,
@@ -41,7 +41,7 @@ position: absolute;
 const HoverableIconButton = styled(IconButton)`
   /* Styles for hover effect */
   &:hover {
-    color: ${(props) => props.hoverColor || "#ffffff"};
+    color: ${(props) => props.hovercolor || "#ffffff"};
   }
 `;
 
@@ -58,7 +58,7 @@ const Header = () => {
         <Tooltip title="Menu">
           <HoverableIconButton
             color="inherit"
-            hoverColor="#000000"
+            hovercolor="#000000"
             active={isMenuOpen}
             onClick={handleMenuToggle}
           >
@@ -70,42 +70,42 @@ const Header = () => {
       <NavMenu isOpen={isMenuOpen}>
         <IconWrapper>
           <Tooltip title="Home">
-            <HoverableIconButton color="inherit" hoverColor="#ffb6c1">
+            <HoverableIconButton color="inherit" hovercolor="#ffb6c1">
               <FontAwesomeIcon icon={faHome} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Contact">
-            <HoverableIconButton color="inherit" hoverColor="#90ee90">
+            <HoverableIconButton color="inherit" hovercolor="#90ee90">
               <FontAwesomeIcon icon={faEnvelope} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Store">
-            <HoverableIconButton color="inherit" hoverColor="#add8e6">
+            <HoverableIconButton color="inherit" hovercolor="#add8e6">
               <FontAwesomeIcon icon={faStore} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Search">
-            <HoverableIconButton color="inherit" hoverColor="#b38f00">
+            <HoverableIconButton color="inherit" hovercolor="#b38f00">
               <FontAwesomeIcon icon={faSearch} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="About Me">
-            <HoverableIconButton color="inherit" hoverColor="#ffa07a">
+            <HoverableIconButton color="inherit" hovercolor="#ffa07a">
               <FontAwesomeIcon icon={faUser} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Cart">
-            <HoverableIconButton color="inherit" hoverColor="#87cefa">
+            <HoverableIconButton color="inherit" hovercolor="#87cefa">
               <FontAwesomeIcon icon={faShoppingBag} />
             </HoverableIconButton>
           </Tooltip>

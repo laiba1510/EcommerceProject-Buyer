@@ -1,13 +1,13 @@
-import React from 'react'
-import Helemt from "react-Helmet"
+import React from 'react';
+import { Helmet } from 'react-helmet';
 
-const Data = ({title}) => {
+const Data = ({ title }) => {
   return (
-   <Helemt>
-    <title>{title}</title>  
-    {/* this will make title of each page same and one jo yaha pass hoga  */}
-   </Helemt>
-  )
-}
+    <Helmet>
+      <title>{title}</title>
+      {/* this will make title of each page same and one jo yaha pass hoga  */}
+    </Helmet>
+  );
+};
 
-export default Data
+export default Data;
