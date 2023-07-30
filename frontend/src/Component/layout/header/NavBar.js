@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 import { Tooltip, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,7 +24,7 @@ const IconWrapper = styled.div`
 `;
 
 const NavMenu = styled.div`
-position: absolute;
+  position: absolute;
   top: ${(props) => (props.isOpen ? "0" : "-200px")};
   left: 50%;
   transform: translateX(-50%);
@@ -46,10 +47,20 @@ const HoverableIconButton = styled(IconButton)`
 `;
 
 const Header = () => {
+  const navigate = useNavigate(); // Initialize useNavigate instead of useHistory
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Add a function to handle "Store" icon click
+  const handleStoreIconClick = () => {
+    navigate("/products"); // Use navigate to navigate to "/products"
+  };
+
+  const handleSearchIconClick = () => {
+    navigate("/search");
   };
 
   return (
@@ -84,14 +95,20 @@ const Header = () => {
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Store">
-            <HoverableIconButton color="inherit" hovercolor="#add8e6">
+            {/* Add onClick event for the "Store" icon */}
+            <HoverableIconButton
+              color="inherit"
+              hovercolor="#add8e6"
+              onClick={handleStoreIconClick} // Add onClick event handler
+            >
               <FontAwesomeIcon icon={faStore} />
             </HoverableIconButton>
           </Tooltip>
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="Search">
-            <HoverableIconButton color="inherit" hovercolor="#b38f00">
+            <HoverableIconButton color="inherit" hovercolor="#b38f00"
+              onClick ={handleSearchIconClick }>
               <FontAwesomeIcon icon={faSearch} />
             </HoverableIconButton>
           </Tooltip>

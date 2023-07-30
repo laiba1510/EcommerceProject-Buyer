@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect,} from "react";
 // import { useNavigate } from "react-router-dom";
 import "./Home.css";
-import Product from "./product.jsx";
+import Product from "./ProductCard.jsx";
 import Data from  "../layout/Data.jsx"
 import { getProduct } from "../../actions/productAction";
 import {  useDispatch, useSelector } from "react-redux";
