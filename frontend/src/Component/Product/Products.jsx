@@ -25,6 +25,7 @@ const Products = () => {
   const [price, setPrice] = useState([0, 9000]);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [category, setCategory] = useState("");
+  const [ratings, setRatings] = useState(0);
 
   const priceSlideHandler = (event, newPrice) => {
     setPrice(newPrice);
@@ -48,8 +49,8 @@ const Products = () => {
 
   const { keyword } = useParams();
   useEffect(() => {
-    dispatch(getProduct(keyword, currentPage, price, category));
-  }, [dispatch, keyword, currentPage, price, category]);
+    dispatch(getProduct(keyword, currentPage, price, category, ratings));
+  }, [dispatch, keyword, currentPage, price, category, ratings]);
 
   return (
     <Fragment>
@@ -60,7 +61,8 @@ const Products = () => {
             {products && products.map((product) => <ProductCard key={product._id} product={product} />)}
           </div>
 
-          <div className="filterBox">
+          {keyword && (
+            <div className="filterBox">
             <Typography>PRICE</Typography>
             <Slider
               value={price}
@@ -71,16 +73,36 @@ const Products = () => {
               max={8000}
             />
             <Typography>Categories</Typography>
-            <ul>{categories.map((category)=>(
+            <ul>{categories.map((category) => (
               <li
                 className="category-link"
                 key={category}
                 onClick={() => setCategory(category)}
-             >
-             {category}
-             </li>
+              >
+                {category}
+              </li>
             ))}</ul>
+
+
+            <fieldset>
+              <Typography component="legend">Ratings above</Typography>
+              <Slider
+                value={ratings}
+                onChange={(e, newRatings) => {
+                  setRatings(newRatings);
+                }}
+                aria-labelledby='continouse-slider'
+                valueLabelDisplay='auto'
+                min={0}
+                max={5}
+              />
+            </fieldset>
           </div>
+
+
+
+          )}
+
 
           {productPerPage < productCounter &&
             (

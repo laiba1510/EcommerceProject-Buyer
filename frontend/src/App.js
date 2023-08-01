@@ -7,6 +7,7 @@ import Home from "./Component/Home/Home.jsx";
 import ProductDetails from "./Component/Product/ProductDetails.jsx";
 import Products from "./Component/Product/Products.jsx"
 import Search from "./Component/Product/Search.jsx"
+import LoginSignUp from "./Component/User/LoginSignUp";
 function App() {
   return (
     <Router>
@@ -17,6 +18,8 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:keyword" element={<Products />} />
         <Route path="/search" element={<Search />} />
+         
+         <Route path="/login" element={<LoginSignUp />} />
       </Routes>
       {/* <Footer /> */}
     </Router>

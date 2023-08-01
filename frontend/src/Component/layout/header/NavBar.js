@@ -63,6 +63,10 @@ const Header = () => {
     navigate("/search");
   };
 
+
+  const handleAccountIconClick = () => {
+    navigate("/login");
+  };
   return (
     <Wrapper>
       <IconWrapper>
@@ -115,7 +119,7 @@ const Header = () => {
         </IconWrapper>
         <IconWrapper>
           <Tooltip title="About Me">
-            <HoverableIconButton color="inherit" hovercolor="#ffa07a">
+            <HoverableIconButton color="inherit" hovercolor="#ffa07a" onClick ={handleAccountIconClick }>
               <FontAwesomeIcon icon={faUser} />
             </HoverableIconButton>
           </Tooltip>

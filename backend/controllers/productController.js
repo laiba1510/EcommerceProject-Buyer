@@ -55,12 +55,12 @@ exports.getProductsbyID = asyncErrorHandling(async (req, res, next) => {
 
 //adding reviews to the product
 exports.productReview = asyncErrorHandling(async (req, res, next) => {
-  const { rating, commentReviews, productId } = req.body;
+  const { ratings, commentReviews, productId } = req.body;
 
   const reviewObject = {
     user: req.user._id,
     name: req.user.name,
-    rating: Number(rating),
+    ratings: Number(ratings),
     commentReviews,
   };
 
@@ -71,7 +71,7 @@ const userReviewed = product.reviews.find((review) => review.user.toString() ===
     // Update the existing review here if needed
     product.reviews.forEach((review) => {
       if (review.user.toString() === req.user._id.toString())
-        (review.rating = rating), (review.commentReviews = commentReviews);
+        (review.ratings = ratings), (review.commentReviews = commentReviews);
     });
 
   } else {
@@ -80,11 +80,11 @@ const userReviewed = product.reviews.find((review) => review.user.toString() ===
   }
 //avergae caclutaion
 let average=0;
-  product.ratings = product.reviews.forEach(review=>{
-    average = average + review.rating 
+  product.ratingss = product.reviews.forEach(review=>{
+    average = average + review.ratings 
   });
 
-  product.ratings = average / product.reviews.length;
+  product.ratingss = average / product.reviews.length;
 
 
   // Save the updated product with the new review
@@ -128,19 +128,19 @@ const newReviewStore = product.reviews.filter((reviews) => reviews._id.toString(
   
 //avergae caclutaion
 let average=0;
-  product.ratings = product.reviews.forEach(review=>{
-    average = average + review.rating 
+  product.ratingss = product.reviews.forEach(review=>{
+    average = average + review.ratings 
   });
 
-  product.ratings = average / product.reviews.length;
+  product.ratingss = average / product.reviews.length;
 
-  const ratings = average/newReviewStore.length;
+  const ratingss = average/newReviewStore.length;
   const reviewCount = newReviewStore.length;
 
   await Product.findByIdAndUpdate(req.query.productId,
     {
       reviews : newReviewStore,
-      ratings,
+      ratingss,
       reviewCount,
     },
     {
