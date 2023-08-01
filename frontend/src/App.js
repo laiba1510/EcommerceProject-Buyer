@@ -8,18 +8,34 @@ import ProductDetails from "./Component/Product/ProductDetails.jsx";
 import Products from "./Component/Product/Products.jsx"
 import Search from "./Component/Product/Search.jsx"
 import LoginSignUp from "./Component/User/LoginSignUp";
+import store from "./store";
+import { loadUser } from "./actions/userAction";
+import profileOptions from "./Component/layout/header/profileOptions.js"
+import { useSelector } from "react-redux";
+import Profile from "./Component/User/Profile";
+
+
+
 function App() {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  React.useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <Router>
       <NavBar />
+      {isAuthenticated && <profileOptions user={user} />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:keyword" element={<Products />} />
         <Route path="/search" element={<Search />} />
-         
-         <Route path="/login" element={<LoginSignUp />} />
+        <Route path="/account" element={<Profile />} />
+        <Route path="/login" element={<LoginSignUp />} />
+       
       </Routes>
       {/* <Footer /> */}
     </Router>
@@ -27,5 +43,3 @@ function App() {
 }
 
 export default App;
-
-

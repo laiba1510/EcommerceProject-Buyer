@@ -1,26 +1,24 @@
-const ErrorHandle = require("../utils/BackendErrorHandle");
-const bcrypt = require("bcryptjs");
+const BackendErrorHandle = require("../utils/BackendErrorHandle");
 const asyncErrorHandling = require("../middleware/asyncErrorHandling");
 const User = require("../models/userModels");
 const cookieTokenization = require("../utils/Token");
-const crypto = require("crypto");
-
+const cloudinary = require("cloudinary");
 const nodeMailer = require("nodemailer");
+const crypto = require("crypto");
 
 const sendEmail = async (options) => {
   const transporter = nodeMailer.createTransport({
-
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    service: process.env.SMTP_SERVICE,
-    auth: { 
-      user: process.env.SMTP_MAIL,
-      pass: process.env.SMTP_PASSWORD,
+    host: process.env.SMPT_HOST,
+    port: process.env.SMPT_PORT,
+    service: process.env.SMPT_SERVICE,
+    auth: {
+      user: process.env.SMPT_MAIL,
+      pass: process.env.SMPT_PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: process.env.SMTP_MAIL,
+    from: process.env.SMPT_MAIL,
     to: options.email,
     subject: options.subject,
     text: options.message,
@@ -29,89 +27,88 @@ const sendEmail = async (options) => {
   await transporter.sendMail(mailOptions);
 };
 
+// Register a User
+exports.registerUser = asyncErrorHandling(async (req, res, next) => {
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
 
-
-exports.registerUser = async (req, res, next) => {
   const { name, email, password } = req.body;
 
-  const user = await User.create({
+  const newUser = await User.create({
     name,
     email,
     password,
-    profilePicture: {
-      public_id: "myCloud.public_id",
-      url: "myCloud.secure_url",
+    avatar: {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
 
-  cookieTokenization(user, 201, res);
+  cookieTokenization(newUser, 201, res);
+});
 
-};
-
-
-//making Login Function 
-
+// Login User
 exports.login = asyncErrorHandling(async (req, res, next) => {
   const { email, password } = req.body;
 
-  //checking email and password verification
+  // checking if user has given password and email both
+
   if (!email || !password) {
-    return next(new ErrorHandle("pls enter email and password", 400));
+    return next(new BackendErrorHandle("Please Enter Email & Password", 400));
   }
 
-  const user = await User.findOne({ email }).select("+password"); //false kiya hai thats why made it
+  const existingUser = await User.findOne({ email }).select("+password");
 
-  if (!user) {
-    return next(new ErrorHandle("Invalid email-password", 401));
+  if (!existingUser) {
+    return next(new BackendErrorHandle("Invalid email or password", 401));
   }
 
-  const passwordMatchCheck = await user.passwordComparison(password);
+  const isPasswordMatched = await existingUser.comparePassword(password);
 
-  if (!passwordMatchCheck) {
-    return next(new ErrorHandle("Invalid email-password", 401));
+  if (!isPasswordMatched) {
+    return next(new BackendErrorHandle("Invalid email or password", 401));
   }
-  const JWTToken = user.setJWT();
 
-  cookieTokenization(user, 200, res);
-
-
+  cookieTokenization(existingUser, 200, res);
 });
 
-
+// Logout User
 exports.logout = asyncErrorHandling(async (req, res, next) => {
-  res.cookie("tokenValue", null,
-    {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-    });
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
 
   res.status(200).json({
     success: true,
-    message: "you logged out",
+    message: "Logged Out",
   });
 });
 
-
+// Forgot Password
 exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return next(new ErrorHandle("User not found", 404));
-
+    return next(new BackendErrorHandle("User not found", 404));
   }
 
-  const newToken = user.resetPassword();
-  await user.save({ validateBeforeSave: false });  // got the pass and saved it 
-  const resetPasswordUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/password/reset/${newToken}`;
-  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
+  // Get ResetPassword Token
+  const resetToken = user.getResetPasswordToken();
 
+  await user.save({ validateBeforeSave: false });
+
+  const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+
+  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
 
   try {
     await sendEmail({
       email: user.email,
-      subject: `reovere password`,
+      subject: `Ecommerce Password Recovery`,
       message,
     });
 
@@ -125,10 +122,9 @@ exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    return next(new ErrorHandle(error.message, 500));
+    return next(new BackendErrorHandle(error.message, 500));
   }
 });
-
 
 // Reset Password
 exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
@@ -145,15 +141,15 @@ exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHandle(
+      new BackendErrorHandle(
         "Reset Password Token is invalid or has been expired",
         400
-      ) 
+      )
     );
   }
 
   if (req.body.password !== req.body.confirmPassword) {
-    return next(new ErrorHandle("Password does not password", 400));
+    return next(new BackendErrorHandle("Password does not match", 400));
   }
 
   user.password = req.body.password;
@@ -165,29 +161,31 @@ exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
   cookieTokenization(user, 200, res);
 });
 
-
-
 // Get User Detail
-exports.getUser = asyncErrorHandling(async (req, res, next) => {
+exports.getUserDetails = asyncErrorHandling(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
   res.status(200).json({
     success: true,
     user,
   });
+
+
+  
 });
 
-exports.userPasswordUpdate = asyncErrorHandling(async (req, res, next) => {
+// update User password
+exports.updatePassword = asyncErrorHandling(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
-  const isPasswordMatched = await user.passwordComparison(req.body.oldPassword);
+  const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandle("Old password is incorrect", 400));
+    return next(new BackendErrorHandle("Old password is incorrect", 400));
   }
 
   if (req.body.newPassword !== req.body.confirmPassword) {
-    return next(new ErrorHandle("password does not match", 400));
+    return next(new BackendErrorHandle("Passwords do not match", 400));
   }
 
   user.password = req.body.newPassword;
@@ -197,13 +195,33 @@ exports.userPasswordUpdate = asyncErrorHandling(async (req, res, next) => {
   cookieTokenization(user, 200, res);
 });
 
-exports.updateUserProfile = asyncErrorHandling(async (req, res, next) => {
+// update User Profile
+exports.updateProfile = asyncErrorHandling(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
   };
 
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+  if (req.body.avatar !== "") {
+    const userToUpdate = await User.findById(req.user.id);
+
+    const imageId = userToUpdate.avatar.public_id;
+
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    newUserData.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -211,6 +229,7 @@ exports.updateUserProfile = asyncErrorHandling(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "updated",
   });
 });
+
+module.exports = exports;
