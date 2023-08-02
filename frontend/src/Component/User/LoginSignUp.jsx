@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useState, useEffect } from "react";
 import "./LoginSignUp.css";
-import Loader from '../layout/pageLoader/Loader';
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useNavigate and useLocation from react-router-dom
+import Loader from "../layout/pageLoader/Loader";
+import { Link, useNavigate ,useLocation} from "react-router-dom";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FaceIcon from "@material-ui/icons/Face";
@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 
-const LoginSignUp = () => { // Removed the 'history' and 'location' props
-
-  const navigate = useNavigate(); // Use the useNavigate hook to get the navigation function
-  const location = useLocation(); // Use the useLocation hook to get the location object
+const LoginSignUp = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
@@ -81,9 +81,9 @@ const LoginSignUp = () => { // Removed the 'history' and 'location' props
     }
 
     if (isAuthenticated) {
-      navigate(redirect); // Use the navigate function to redirect instead of history.push
+      navigate(redirect); // Step 3: Use navigate for navigation
     }
-  }, [dispatch, error, alert, navigate, isAuthenticated, redirect]);
+  }, [dispatch, error, alert, isAuthenticated, redirect]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {

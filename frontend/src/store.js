@@ -8,7 +8,7 @@ import {
   productsReducer,
   
 } from "./reducers/productReducer";
-import { userReducer } from "./reducers/userReducer";
+import { forgotPasswordReducer, profileReducer, userReducer } from "./reducers/userReducer";
 
 
 // Combine all the reducers into a single reducer
@@ -16,6 +16,9 @@ const reducer = combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
   user: userReducer,
+  profile: profileReducer,
+  forgotPassword: forgotPasswordReducer,
+
 });
 
 let initialState = {};

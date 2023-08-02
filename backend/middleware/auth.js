@@ -6,7 +6,7 @@ const User = require("../models/userModels");
 
 const checkAuthentication = asyncErrorHandling(async (req, res, next) => {
     // Access the token using req.cookies.tokenValue instead of req.cookies.jwtToken
-    const jwtToken = req.cookies.tokenValue; // Token stored in cookie at the time of login
+    const jwtToken = req.cookies.token; // Token stored in cookie at the time of login
     
     if (!jwtToken) {
       return next(new ErrorHandle("Please login to access", 401));

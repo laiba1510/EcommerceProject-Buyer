@@ -10,7 +10,7 @@ const cookieTokenization = (user, statusCode, res) => {
   };
 
   // Set the cookie with the key "tokenValue" instead of "token"
-  res.status(statusCode).cookie("tokenValue", token, options).json({
+  res.status(statusCode).cookie("token", token, options).json({
     success: true,
     user,
     token,

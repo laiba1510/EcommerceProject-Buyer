@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { SpeedDial, SpeedDialAction } from "@material-ui/lab";
 import Backdrop from "@material-ui/core/Backdrop";
-import DashboardIcon from "@material-ui/icons/Dashboard";
 import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ListAltIcon from "@material-ui/icons/ListAlt";
@@ -32,28 +31,16 @@ const ProfileOptions = ({ user }) => {
     { icon: <ExitToAppIcon />, name: "Logout", func: logoutUser },
   ];
 
-  if (user.role === "admin") {
-    options.unshift({
-      icon: <DashboardIcon />,
-      name: "Dashboard",
-      func: dashboard,
-    });
-  }
-
-  function dashboard() {
-    history.push("/admin/dashboard");
-  }
-
   function orders() {
-    history.push("/orders");
+    history("/orders");
   }
 
   function account() {
-    history.push("/account");
+    history("/account");
   }
 
   function cart() {
-    history.push("/cart");
+    history("/cart");
   }
 
   function logoutUser() {
