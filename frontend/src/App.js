@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment,useEffect, useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./Component/layout/header/NavBar";
 import "./App.css";
@@ -20,12 +21,25 @@ import Profile from "./Component/User/Profile";
 import UpdatePassword from "./Component/User/UpdatePassword";
 import ForgotPassword from "./Component/User/ForgotPassword";
 import ResetPassword from "./Component/User/ResetPassword";
+import Cart from "./Component/Cart/Cart";
+import Shipping from "./Component/Cart/Shipping";
+// import ConfirmOrder from "./Component/Cart/ConfirmOrder.js";
+import axios from "axios";
+// import Payment from "./Component/Cart/Payment";
 
+// import OrderSuccess from "./Component/Cart/OrderSuccess";
 function App() {
   const { loading, isAuthenticated, user } = useSelector((state) => state.user);
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApiKey() {
+    const { data } = await axios.get("/api/v1/stripeapikey");
+
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   React.useEffect(() => {
-    store.dispatch(loadUser());
+    store.dispatch(loadUser());  getStripeApiKey();
   }, []);
 
   return (
@@ -47,7 +61,16 @@ function App() {
             <Route path="/login" element={<LoginSignUp />} />
             <Route path="/password/forgot" element={<ForgotPassword />} />
             <Route path="/password/reset/:token" element={<ResetPassword />} />
+            <Route path="/Cart" element={<Cart/>} />
+            <Route path="/Shipping" element={<Shipping/>} />
+
+            {/* <Route
+
+path="/shipping"
+element={isAuthenticated ? <Shipping /> : <Navigate to="/login" replace />}
+/> */}
             <Route
+
               path="/account"
               element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
             />

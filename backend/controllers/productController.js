@@ -66,36 +66,35 @@ exports.productReview = asyncErrorHandling(async (req, res, next) => {
 
   const product = await Product.findById(productId).populate('reviews.user');
 
-const userReviewed = product.reviews.find((review) => review.user.toString() === req.user._id.toString());
+  const userReviewed = product.reviews.find((review) => review.user.toString() === req.user._id.toString());
+
   if (userReviewed) {
     // Update the existing review here if needed
     product.reviews.forEach((review) => {
-      if (review.user.toString() === req.user._id.toString())
-        (review.ratings = ratings), (review.commentReviews = commentReviews);
+      if (review.user.toString() === req.user._id.toString()) {
+        review.ratings = Number(ratings);
+        review.commentReviews = commentReviews;
+      }
     });
-
   } else {
     product.reviews.push(reviewObject);
-    product.numOfReviews = product.reviews.length
+    product.numOfReviews = product.reviews.length;
   }
-//avergae caclutaion
-let average=0;
-  product.ratingss = product.reviews.forEach(review=>{
-    average = average + review.ratings 
-  });
 
-  product.ratingss = average / product.reviews.length;
+  // Calculate the sum of ratings
+  const ratingsSum = product.reviews.reduce((acc, review) => acc + review.ratings, 0);
 
+  // Update the average rating
+  product.ratingss = ratingsSum / product.reviews.length;
 
   // Save the updated product with the new review
-  await product.save({validateBeforeSave: false});
+  await product.save({ validateBeforeSave: false });
 
   res.status(200).json({
     success: true,
     message: "Review added/updated successfully",
   });
 });
-
 
 exports.getAllReviews = asyncErrorHandling(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);

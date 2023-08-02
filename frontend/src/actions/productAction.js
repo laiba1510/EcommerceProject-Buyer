@@ -62,7 +62,7 @@ async(dispatch) =>
 
 
 
-export const clearErros = () =>
+export const clearErrors = () =>
 async(dispatch) =>
 {
     dispatch({type :CLEAR_ERRORS});
