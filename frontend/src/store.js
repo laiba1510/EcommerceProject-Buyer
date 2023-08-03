@@ -6,10 +6,12 @@ import {
   productDetailsReducer,
 
   productsReducer,
+  newReviewReducer
   
 } from "./reducers/productReducer";
 import { forgotPasswordReducer, profileReducer, userReducer } from "./reducers/userReducer";
-import {cartReducer} from "./reducers/cartReducer";
+// import {cartReducer} from "./reducers/cartReducer";
+// import {newOrderReducer,myOrdersReducer, orderDetailsReducer,} from "./reducers/orderReducer";
 
 
 // Combine all the reducers into a single reducer
@@ -19,21 +21,25 @@ const reducer = combineReducers({
   user: userReducer,
   profile: profileReducer,
   forgotPassword: forgotPasswordReducer,
-  cart: cartReducer
+  // cart: cartReducer,
+  // newOrder: newOrderReducer,
+  // myOrders: myOrdersReducer,
+  // orderDetails: orderDetailsReducer,
+  // newReview: newReviewReducer,
 
 })
 
 ;
 
 let initialState = {
-  cart: {
-    cartItems: localStorage.getItem("cartItems")
-      ? JSON.parse(localStorage.getItem("cartItems"))
-      : [],
-    shippingInfo: localStorage.getItem("shippingInfo")
-      ? JSON.parse(localStorage.getItem("shippingInfo"))
-      : {},
-  },
+  // cart: {
+  //   cartItems: localStorage.getItem("cartItems")
+  //     ? JSON.parse(localStorage.getItem("cartItems"))
+  //     : [],
+  //   shippingInfo: localStorage.getItem("shippingInfo")
+  //     ? JSON.parse(localStorage.getItem("shippingInfo"))
+  //     : {},
+  // },
 };
 
 

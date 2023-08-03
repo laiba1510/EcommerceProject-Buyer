@@ -7,8 +7,8 @@ const Footer = () => {
   return (
     <footer>
       <div className="company-info">
-        <h2>EMUBA</h2>
-        <p>We strive for accuracy</p>
+        <h2>akyfxd</h2>
+        <p>good vrand</p>
       </div>
       <ul className="social-icons">
         <li className="icon facebook">

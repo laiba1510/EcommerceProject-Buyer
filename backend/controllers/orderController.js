@@ -62,18 +62,18 @@ exports.createOrder = async (req, res, next) => {
   //one order at a time 
   exports.userOwnOrder= asyncErrorHandling(async(req, res, next)=>{
 
-    const order = await Order.findOne({user: req.user._id });
+    const orders = await Order.findOne({user: req.user._id });
 
 
 
     res.status(200).json({ 
       success: true,
-      order,
+      orders,
     });
 
   });
   
-
+ 
 
 
 

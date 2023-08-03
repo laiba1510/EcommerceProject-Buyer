@@ -42,8 +42,8 @@ exports.registerUser = asyncErrorHandling(async (req, res, next) => {
     email,
     password,
     avatar: {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
+      public_id: "myCloud.public_id",
+      url: "myCloud.secure_url"
     },
   });
 
@@ -56,6 +56,7 @@ exports.login = asyncErrorHandling(async (req, res, next) => {
 
   // checking if user has given password and email both
 
+  console
   if (!email || !password) {
     return next(new BackendErrorHandle("Please Enter Email & Password", 400));
   }
@@ -128,6 +129,8 @@ exports.forgotPassword = asyncErrorHandling(async (req, res, next) => {
 
 // Reset Password
 exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
+ 
+  
   // creating token hash
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -147,7 +150,7 @@ exports.resetPassword = asyncErrorHandling(async (req, res, next) => {
       )
     );
   }
-
+  const { password, confirmPassword } = req.body;
   if (req.body.password !== req.body.confirmPassword) {
     return next(new BackendErrorHandle("Password does not match", 400));
   }

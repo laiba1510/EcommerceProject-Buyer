@@ -72,6 +72,7 @@ export const register = (userData) => async (dispatch)=>
          console.log(error.response.data);
       }
 };
+
 export const loadUser = () => async (dispatch) => {
     try {
       dispatch({ type: LOAD_USER_REQUEST });

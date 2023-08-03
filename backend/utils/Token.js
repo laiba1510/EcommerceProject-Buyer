@@ -1,6 +1,6 @@
 const cookieTokenization = (user, statusCode, res) => {
   const token = user.setJWT();
-
+console.log(token)
   // optional time for cookie
   const options = {
     expires: new Date(
